@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\working_with_db\working_with_db.csproj" />
+    <ProjectReference Include="..\working_with_scrapper\working_with_scrapper.csproj" />
   </ItemGroup>
 
 </Project>
