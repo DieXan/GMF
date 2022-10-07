@@ -7,8 +7,8 @@ class main
     {
         //db db = new db();
         //db.create_db();
-        first first = new first();
-        first.get_one();
+        //first first = new first();
+        //first.get_one();
         Console.Read();
     }
 }
