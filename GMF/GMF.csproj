@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\working_with_db\working_with_db.csproj" />
-    <ProjectReference Include="..\working_with_scrapper\working_with_scrapper.csproj" />
+    <ProjectReference Include="..\working_with_db\DatabaseHandler.csproj" />
+    <ProjectReference Include="..\working_with_scrapper\ScrapHandler.csproj" />
   </ItemGroup>
 
 </Project>

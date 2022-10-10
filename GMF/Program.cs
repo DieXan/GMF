@@ -1,9 +1,9 @@
 ﻿using System;
 using Telegram.Bot;
-using working_with_db;
+using DatabaseHandler;
 using System.Threading;
 using Telegram.Bot.Types;
-using working_with_scrapper;
+using ScrapHandler;
 using System.Threading.Tasks;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Extensions.Polling;
@@ -31,6 +31,9 @@ class main
     }
     static void Main()
     {
+        db db = new db();
+        db.InsertFood("adsads", "asdasd", 342);
+
         Console.WriteLine("Запущен бот " + bot.GetMeAsync().Result.FirstName);
 
         var cts = new CancellationTokenSource();

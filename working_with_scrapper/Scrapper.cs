@@ -2,11 +2,11 @@
 using System;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace working_with_scrapper
+namespace ScrapHandler
 {
-    public class first
+    public class ScrapFood
     {
-        public void get_one()
+        public void GetAllFoodInfo()
         {
             string htmlCode;
             using (WebClient client = new WebClient())
@@ -19,6 +19,7 @@ namespace working_with_scrapper
                 string[] s2 = s1[i].Split("</h2>");
                 Console.WriteLine(s2[0]);
             }
+
         }
     }
 }

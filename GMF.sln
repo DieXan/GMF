@@ -5,9 +5,9 @@ VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GMF", "GMF\GMF.csproj", "{929F6E7F-F5E5-4458-9DC6-D529F1CC020C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "working_with_db", "working_with_db\working_with_db.csproj", "{FA97CFFE-CBE4-4B98-9409-515E8938AA63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseHandler", "working_with_db\DatabaseHandler.csproj", "{FA97CFFE-CBE4-4B98-9409-515E8938AA63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "working_with_scrapper", "working_with_scrapper\working_with_scrapper.csproj", "{20A90F44-EB73-470B-A23F-C24D2E43F087}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScrapHandler", "working_with_scrapper\ScrapHandler.csproj", "{20A90F44-EB73-470B-A23F-C24D2E43F087}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
