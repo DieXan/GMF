@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\working_with_db\DatabaseHandler.csproj" />
+  </ItemGroup>
+
 </Project>

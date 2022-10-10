@@ -32,7 +32,10 @@ class main
     static void Main()
     {
         db db = new db();
-        db.InsertFood("adsads", "asdasd", 342);
+        ScrapFood sf = new ScrapFood();
+        sf.GetAllFoodInfo();
+        //db.InsertFood("adsads", "asdasd", 342);
+        //db.CreateDB();
 
         Console.WriteLine("Запущен бот " + bot.GetMeAsync().Result.FirstName);
 

@@ -37,7 +37,7 @@ namespace DatabaseHandler
                     command.Connection = connection;
                     command.CommandText = "SELECT COUNT(*) FROM foods";
                     int id = Convert.ToInt16(command.ExecuteScalar().ToString());
-                    command.CommandText = $"INSERT INTO foods(id, name, category, price) VALUES ({id}, {food}, {category}, {price})";
+                    command.CommandText = $"INSERT INTO foods(id, name, category, price) VALUES ({id}, '{food}', '{category}', '{price}')";
                     command.ExecuteNonQuery();
                 }
                 catch (InvalidCastException e)
