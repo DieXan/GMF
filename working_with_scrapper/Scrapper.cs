@@ -1,11 +1,12 @@
 ﻿using System.Net;
 using System;
 using static System.Net.Mime.MediaTypeNames;
-
+using DatabaseHandler;
 namespace ScrapHandler
 {
     public class ScrapFood
     {
+        db db = new db();
         public void GetAllFoodInfo()
         {
             string htmlCode;
@@ -17,7 +18,7 @@ namespace ScrapHandler
             for (int i = 1; i < s1.Length; i++)
             {
                 string[] s2 = s1[i].Split("</h2>");
-                string[] s3 = s2[i].Split("col-lg-3 col-md-3 col-sm-4 mt-4");
+                string[] s3 = s1[i].Split("col-lg-3 col-md-3 col-sm-4 mt-4");
                 Console.WriteLine(s2[0]);
                 for (int j = 1; j < s3.Length - 1; j++)
                 {
@@ -26,7 +27,19 @@ namespace ScrapHandler
                         string[] s4 = s3[j].Split("Подробнее");
                         string[] s5 = s4[1].Split(">");
                         string[] s6 = s5[1].Split("<");
-                        Console.WriteLine(s6[0]);
+                        string[] s7 = s3[j].Split("Подробнее");
+                        string[] s8 = s7[1].Split("р.</b>");
+                        string[] s9 = s8[0].Split("> ");
+                        Console.WriteLine("\t" + s6[0] + " - " + s9[s9.Length - 1] + " руб.");
+                        try
+                        {
+                            db.InsertFood(Convert.ToString(s6[0]), Convert.ToString(s2[0]), Convert.ToInt32(s9[s9.Length - 1]));
+                        }
+                        catch (Exception)
+                        {
+
+                            throw;
+                        }
                     }
                     catch (Exception)
                     {

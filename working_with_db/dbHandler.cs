@@ -46,7 +46,26 @@ namespace DatabaseHandler
                 }
             }
         }
-
+        public void InsertUser(int id_user)
+        {
+            using (var connection = new SqliteConnection("Data Source=global.db"))
+            {
+                connection.Open();
+                try
+                {
+                    SqliteCommand command = new SqliteCommand();
+                    command.Connection = connection;
+                    command.CommandText = "SELECT COUNT(*) FROM foods";
+                    int id = Convert.ToInt16(command.ExecuteScalar().ToString());
+                    command.CommandText = $"INSERT INTO foods(id, name, category, price) VALUES ()";
+                    command.ExecuteNonQuery();
+                }
+                catch (InvalidCastException e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
+        }
     }
     
 }
