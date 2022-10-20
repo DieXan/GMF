@@ -31,9 +31,9 @@ class main
     }
     static void Main()
     {
-        db db = new db();
-        ScrapFood sf = new ScrapFood();
-        sf.GetAllFoodInfo();
+        //db db = new db();
+        //ScrapFood sf = new ScrapFood();
+        //sf.GetAllFoodInfo();
         //db.InsertFood("adsads", "asdasd", 342);
         //db.CreateDB();
 
