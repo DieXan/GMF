@@ -9,6 +9,7 @@ using Telegram.Bot.Exceptions;
 using Telegram.Bot.Extensions.Polling;
 class main
 {
+    db db = new db();
 
     static ITelegramBotClient bot = new TelegramBotClient("1925272046:AAF_kH6jfBY1B53L_EUTRhTBR_IsR1f5Ph0");
     public static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
@@ -19,6 +20,7 @@ class main
             var message = update.Message;
             if (message.Text.ToLower() == "/start")
             {
+                db.InsertUser(Convert.ToInt32(message.Chat.Id), message.Chat.FirstName);
                 await botClient.SendTextMessageAsync(message.Chat, "Здравствуйте!");
                 return;
             }

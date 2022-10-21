@@ -46,7 +46,7 @@ namespace DatabaseHandler
                 }
             }
         }
-        public void InsertUser(int id_user)
+        public static void InsertUser(int id_user, string name_user)
         {
             using (var connection = new SqliteConnection("Data Source=global.db"))
             {
@@ -55,10 +55,12 @@ namespace DatabaseHandler
                 {
                     SqliteCommand command = new SqliteCommand();
                     command.Connection = connection;
-                    command.CommandText = "SELECT COUNT(*) FROM foods";
-                    int id = Convert.ToInt16(command.ExecuteScalar().ToString());
-                    command.CommandText = $"INSERT INTO foods(id, name, category, price) VALUES ()";
-                    command.ExecuteNonQuery();
+                    command.CommandText = $"SELECT COUNT(*) FROM users WHERE id = {id_user}";
+                    if (Convert.ToInt16(command.ExecuteScalar().ToString()) == 0)
+                    {
+                        command.CommandText = $"INSERT INTO users(id, name) VALUES ('{id_user}', '{name_user}')";
+                        command.ExecuteNonQuery();
+                    }
                 }
                 catch (InvalidCastException e)
                 {
