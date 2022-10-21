@@ -4,7 +4,7 @@ namespace DatabaseHandler
 {
     public class db
     {
-        public void CreateDB()
+        public static void CreateDB()
         {
             using (var connection = new SqliteConnection("Data Source=global.db"))
             {
@@ -26,7 +26,7 @@ namespace DatabaseHandler
                 Console.WriteLine("База данных создана!");
             }
         }
-        public void InsertFood(string food, string category, int price)
+        public static void InsertFood(string food, string category, int price)
         {
             using (var connection = new SqliteConnection("Data Source=global.db"))
             {
@@ -35,14 +35,16 @@ namespace DatabaseHandler
                 {
                     SqliteCommand command = new SqliteCommand();
                     command.Connection = connection;
-                    command.CommandText = "SELECT COUNT(*) FROM foods";
+                    //command.CommandText = $"SELECT COUNT(*) FROM foods AS f WHERE f.name = {food} AND f.category = {category}";
+                    command.CommandText = $"SELECT COUNT(*) FROM foods";
                     int id = Convert.ToInt16(command.ExecuteScalar().ToString());
                     command.CommandText = $"INSERT INTO foods(id, name, category, price) VALUES ({id}, '{food}', '{category}', '{price}')";
                     command.ExecuteNonQuery();
                 }
                 catch (InvalidCastException e)
                 {
-                    Console.WriteLine(e);
+                    //Console.WriteLine(e);
+                    throw;
                 }
             }
         }

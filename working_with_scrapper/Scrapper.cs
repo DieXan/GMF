@@ -4,10 +4,10 @@ using static System.Net.Mime.MediaTypeNames;
 using DatabaseHandler;
 namespace ScrapHandler
 {
-    public class ScrapFood
+    public class sf
     {
         db db = new db();
-        public void GetAllFoodInfo()
+        public static void GetAllFoodInfo()
         {
             string htmlCode;
             using (WebClient client = new WebClient())
@@ -33,11 +33,27 @@ namespace ScrapHandler
                         Console.WriteLine("\t" + s6[0] + " - " + s9[s9.Length - 1] + " руб.");
                         try
                         {
-                            db.InsertFood(Convert.ToString(s6[0]), Convert.ToString(s2[0]), Convert.ToInt32(s9[s9.Length - 1]));
-                        }
-                        catch (Exception)
-                        {
 
+                            
+                            string price = Convert.ToString(s9[s9.Length - 1]);
+                            bool f = false;
+                            for(int k = 0; k < price.Length; k++)
+                            {
+                                f = Char.IsDigit(price[k]) == false ? true : false;
+
+                            }
+                            if (f == false)
+                            {
+                                string name = Convert.ToString(s6[0]);
+                                int p_rice = Convert.ToInt32(s9[s9.Length - 1]);
+                                string category = Convert.ToString(s2[0]);
+                                db.InsertFood(name, category, p_rice);
+                            }
+                            
+                        }
+                        catch (InvalidCastException e)
+                        {
+                            Console.WriteLine(e);
                             throw;
                         }
                     }

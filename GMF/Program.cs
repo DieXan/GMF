@@ -10,6 +10,7 @@ using Telegram.Bot.Extensions.Polling;
 class main
 {
     db db = new db();
+    sf sf = new sf();
 
     static ITelegramBotClient bot = new TelegramBotClient("1925272046:AAF_kH6jfBY1B53L_EUTRhTBR_IsR1f5Ph0");
     public static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
@@ -24,6 +25,12 @@ class main
                 await botClient.SendTextMessageAsync(message.Chat, "Здравствуйте!");
                 return;
             }
+            if (message.Text.ToLower() == "/update")
+            {
+                sf.GetAllFoodInfo();
+                await botClient.SendTextMessageAsync(message.Chat, "Проверка на новые позиции началась!");
+                return;
+            }
             await botClient.SendTextMessageAsync(message.Chat, "Дорогой, я ничего не понимаю!");
         }
     }
@@ -33,12 +40,10 @@ class main
     }
     static void Main()
     {
-        //db db = new db();
-        //ScrapFood sf = new ScrapFood();
-        //sf.GetAllFoodInfo();
+
         //db.InsertFood("adsads", "asdasd", 342);
         //db.CreateDB();
-
+        //sf.GetAllFoodInfo();
         Console.WriteLine("Запущен бот " + bot.GetMeAsync().Result.FirstName);
 
         var cts = new CancellationTokenSource();
