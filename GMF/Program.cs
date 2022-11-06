@@ -3,6 +3,7 @@ using Telegram.Bot;
 using DatabaseHandler;
 using System.Threading;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.ReplyMarkups;
 using ScrapHandler;
 using System.Threading.Tasks;
 using Telegram.Bot.Exceptions;
@@ -12,17 +13,31 @@ class main
     db db = new db();
     sf sf = new sf();
 
+    
+
     static ITelegramBotClient bot = new TelegramBotClient("1925272046:AAF_kH6jfBY1B53L_EUTRhTBR_IsR1f5Ph0");
     public static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(update));
         if (update.Type == Telegram.Bot.Types.Enums.UpdateType.Message)
         {
+            ReplyKeyboardMarkup replyKeyboardMarkup_start = new(new[]
+            {
+                new KeyboardButton[] { "Задать параметры", "Готовые комбо от нас", "О нас" },
+            })
+            {
+                ResizeKeyboard = true
+            };
             var message = update.Message;
             if (message.Text.ToLower() == "/start")
             {
                 db.InsertUser(Convert.ToInt32(message.Chat.Id), message.Chat.FirstName);
-                await botClient.SendTextMessageAsync(message.Chat, "Здравствуйте!");
+                await botClient.SendTextMessageAsync(message.Chat, "Здравствуйте!", replyMarkup: replyKeyboardMarkup_start);
+                return;
+            }
+            if (message.Text.ToLower() == "о нас")
+            {
+                await botClient.SendTextMessageAsync(message.Chat, "Над созданием экосистемы виновны:\n@cute_admin\n@bulletproof_heart", replyMarkup: replyKeyboardMarkup_start);
                 return;
             }
             if (message.Text.ToLower() == "/update")
@@ -40,10 +55,6 @@ class main
     }
     static void Main()
     {
-
-        //db.InsertFood("adsads", "asdasd", 342);
-        //db.CreateDB();
-        //sf.GetAllFoodInfo();
         Console.WriteLine("Запущен бот " + bot.GetMeAsync().Result.FirstName);
 
         var cts = new CancellationTokenSource();
