@@ -8,13 +8,13 @@ using ScrapHandler;
 using System.Threading.Tasks;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Extensions.Polling;
+using UserOption;
+
 class main
 {
     db db = new db();
     sf sf = new sf();
-
-    
-
+    UO UO = new UO();
     static ITelegramBotClient bot = new TelegramBotClient("1925272046:AAF_kH6jfBY1B53L_EUTRhTBR_IsR1f5Ph0");
     public static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
@@ -44,6 +44,12 @@ class main
             {
                 sf.GetAllFoodInfo();
                 await botClient.SendTextMessageAsync(message.Chat, "Проверка на новые позиции началась!");
+                return;
+            }
+            if (message.Text.ToLower() == "Настроить параметры вывода")
+            {
+                UO.ChangeStep(Convert.ToInt32(message.Chat.Id), 1);
+                await botClient.SendTextMessageAsync(message.Chat, "Ответьте на пару вопросов, пожалуйста.");
                 return;
             }
             await botClient.SendTextMessageAsync(message.Chat, "Дорогой, я ничего не понимаю!");

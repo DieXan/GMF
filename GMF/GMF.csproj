@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\UserOption\UserOption.csproj" />
     <ProjectReference Include="..\working_with_db\DatabaseHandler.csproj" />
     <ProjectReference Include="..\working_with_scrapper\ScrapHandler.csproj" />
   </ItemGroup>
