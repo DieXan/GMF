@@ -10,6 +10,7 @@ using Telegram.Bot.Exceptions;
 using Telegram.Bot.Extensions.Polling;
 using UserOption;
 using Microsoft.Data.Sqlite;
+using OrderHandler;
 
 class main
 {
@@ -22,7 +23,7 @@ class main
         {
             ReplyKeyboardMarkup replyKeyboardMarkup_start = new(new[]
             {
-                new KeyboardButton[] { "Задать параметры выбора", "Готовые комбо от нас", "О нас" },
+                new KeyboardButton[] { "Подобрать", "Задать параметры выбора", "Готовые комбо от нас", "О нас" },
             })
             {
                 ResizeKeyboard = true
@@ -64,6 +65,21 @@ class main
                 db.CreateDB();
                 await botClient.SendTextMessageAsync(message.Chat, "Создаем бд!");
                 return;
+            }
+            if (message.Text.ToLower() == "подобрать")
+            {
+                if (db.CheckActive(Convert.ToInt32(message.Chat.Id)) == 1)
+                {
+                    await botClient.SendTextMessageAsync(message.Chat, OH.GetFoodForUser(Convert.ToInt32(message.Chat.Id)), replyMarkup: replyKeyboardMarkup_start);
+                    return;
+                }
+                else
+                {
+                    UserStep[Convert.ToInt32(message.Chat.Id)] = 1;
+                    await botClient.SendTextMessageAsync(message.Chat, "Ответьте на пару вопросов, пожалуйста.\nВаш заказ должен содержать выпить?да/нет", replyMarkup: replyKeyboardMarkup_YesOrNot);
+                    return;
+                }
+                
             }
             if (message.Text.ToLower() == "задать параметры выбора")
             {
@@ -114,17 +130,14 @@ class main
                         UO.ChangeEtcOption(Convert.ToInt32(message.Chat.Id), 0);
                     }
                     UserStep[Convert.ToInt32(message.Chat.Id)] = 4;
-                    UserStep.Remove(Convert.ToInt32(message.Chat.Id));
                     await botClient.SendTextMessageAsync(message.Chat, "Какой у вас бюджет?", replyMarkup: replyKeyboardMarkup_MoneyDef);
                     return;
                 }
                 if (UserStep[Convert.ToInt32(message.Chat.Id)] == 4)
                 {
-                    if (Convert.ToInt32(message.Text) >= 0)
-                    {
-                        UO.ChangeBalanceOption(Convert.ToInt32(message.Chat.Id), Convert.ToInt32(message.Text));
-                    }
+                    UO.ChangeBalanceOption(Convert.ToInt32(message.Chat.Id), Convert.ToInt32(message.Text));
                     UserStep.Remove(Convert.ToInt32(message.Chat.Id));
+                    Console.WriteLine(1);
                     await botClient.SendTextMessageAsync(message.Chat, "Готово!", replyMarkup: replyKeyboardMarkup_start);
                     return;
                 }
