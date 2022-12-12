@@ -15,7 +15,7 @@ namespace DatabaseHandler
                     command.Connection = connection;
                     command.CommandText = "CREATE TABLE users(id INTEGER NOT NULL, name TEXT NOT NULL)";
                     command.ExecuteNonQuery();
-                    command.CommandText = "CREATE TABLE UsersOptions(id INTEGER NOT NULL, drink BOOL NOT NULL, burger BOOL NOT NULL)";
+                    command.CommandText = "CREATE TABLE UsersOptions(id INTEGER NOT NULL, drink INTEGER NOT NULL, burger INTEGER NOT NULL, etc INTEGER NOT NULL)";
                     command.ExecuteNonQuery();
                     command.CommandText = "CREATE TABLE foods(id INTEGER NOT NULL, name TEXT NOT NULL, category TEXT NOT NULL, price INTEGER NOT NULL)";
                     command.ExecuteNonQuery();

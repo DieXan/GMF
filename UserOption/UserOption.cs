@@ -1,49 +1,107 @@
-﻿namespace UserOption
+﻿using System;
+using Microsoft.Data.Sqlite;
+namespace UserOption
 {
     public class UO
     {
-        private Dictionary<int, int> step = new Dictionary<int, int>() ;
-        //public Dictionary<int, bool> DrinkOption = new Dictionary<int, bool>();
-        public Dictionary<int, int> Step
-        {
-            get { return step; }
-            set { step = value; }
-        }
-        public void ChangeStep(int user_id, int step)
-        {
-            Dictionary<int, int> _Step = new Dictionary<int, int>();
-            _Step = Step;
-            if (Step.ContainsKey(user_id) == true)
-            {
-                _Step[user_id] = step;
-                Step = _Step;
-            }
-            else
-            {
-                _Step.Add(user_id, step);
-                Step = _Step;
-            }
-        }
         
-        public UO()
+        /*public static void ChangeStep(int user_id, int step)
         {
-            Dictionary<int, int> _Step = new Dictionary<int, int>();
-            //Dictionary<int, bool> _DrinkOption = new Dictionary<int, bool>();
-            Step = _Step;
-            //DrinkOption = _DrinkOption;
-        }
-        /*public void ChangeDrinkOption(int user_id, bool NeedOrNot)
-        {
-            if (DrinkOption.ContainsKey(user_id) == true)
+            using (var connection = new SqliteConnection("Data Source=global.db"))
             {
-                DrinkOption[user_id] = NeedOrNot;
-            }
-            else
-            {
-                DrinkOption.Add(user_id, NeedOrNot);
+                connection.Open();
+                try
+                {
+                    SqliteCommand command = new SqliteCommand();
+                    command.Connection = connection;
+                    command.CommandText = $"SELECT COUNT(*) FROM UsersOptions WHERE id = {user_id}";
+                    if (Convert.ToInt16(command.ExecuteScalar().ToString()) == 0)
+                    {
+                        command.CommandText = $"INSERT INTO UsersOptions(id, step, drink, burger) VALUES ('{user_id}', 1, 0, 0)";
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch (InvalidCastException e)
+                {
+                    Console.WriteLine(e);
+                }
             }
         }*/
-
+        public static void ChangeDrinkOption(int user_id, int NeedOrNot)
+        {
+            using (var connection = new SqliteConnection("Data Source=global.db"))
+            {
+                connection.Open();
+                try
+                {
+                    SqliteCommand command = new SqliteCommand();
+                    command.Connection = connection;
+                    command.CommandText = $"SELECT COUNT(*) FROM UsersOptions WHERE id = {user_id}";
+                    if (Convert.ToInt16(command.ExecuteScalar().ToString()) == 0)
+                    {
+                        command.CommandText = $"INSERT INTO UsersOptions(id, drink, burger, etc) VALUES ('{user_id}', {NeedOrNot}, 666, 666)";
+                        command.ExecuteNonQuery();
+                        Console.WriteLine(NeedOrNot);
+                    }
+                    else
+                    {
+                        command.CommandText = $"UPDATE UsersOptions SET drink = {NeedOrNot} WHERE id = {user_id}";
+                        command.ExecuteNonQuery();
+                        Console.WriteLine(NeedOrNot);
+                    }
+                }
+                catch (InvalidCastException e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
+        }
+        public static void ChangeBurgerOption(int user_id, int NeedOrNot)
+        {
+            using (var connection = new SqliteConnection("Data Source=global.db"))
+            {
+                connection.Open();
+                try
+                {
+                    SqliteCommand command = new SqliteCommand();
+                    command.Connection = connection;
+                    command.CommandText = $"SELECT COUNT(*) FROM UsersOptions WHERE id = {user_id}";
+                    if (Convert.ToInt16(command.ExecuteScalar().ToString()) == 1)
+                    {
+                        command.CommandText = $"UPDATE UsersOptions SET burger = {NeedOrNot} WHERE id = {user_id}";
+                        command.ExecuteNonQuery();
+                        Console.WriteLine(NeedOrNot);
+                    }
+                }
+                catch (InvalidCastException e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
+        }
+        public static void ChangeEtcOption(int user_id, int NeedOrNot)
+        {
+            using (var connection = new SqliteConnection("Data Source=global.db"))
+            {
+                connection.Open();
+                try
+                {
+                    SqliteCommand command = new SqliteCommand();
+                    command.Connection = connection;
+                    command.CommandText = $"SELECT COUNT(*) FROM UsersOptions WHERE id = {user_id}";
+                    if (Convert.ToInt16(command.ExecuteScalar().ToString()) == 1)
+                    {
+                        command.CommandText = $"UPDATE UsersOptions SET etc = {NeedOrNot} WHERE id = {user_id}";
+                        command.ExecuteNonQuery();
+                        Console.WriteLine(NeedOrNot);
+                    }
+                }
+                catch (InvalidCastException e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
+        }
 
     }
 }

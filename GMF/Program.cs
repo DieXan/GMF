@@ -9,12 +9,11 @@ using System.Threading.Tasks;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Extensions.Polling;
 using UserOption;
+using Microsoft.Data.Sqlite;
 
 class main
 {
-    db db = new db();
-    sf sf = new sf();
-    UO UO = new UO();
+    static Dictionary<int, int> UserStep = new Dictionary<int, int>();
     static ITelegramBotClient bot = new TelegramBotClient("1925272046:AAF_kH6jfBY1B53L_EUTRhTBR_IsR1f5Ph0");
     public static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
@@ -23,7 +22,7 @@ class main
         {
             ReplyKeyboardMarkup replyKeyboardMarkup_start = new(new[]
             {
-                new KeyboardButton[] { "Задать параметры", "Готовые комбо от нас", "О нас" },
+                new KeyboardButton[] { "Задать параметры выбора", "Готовые комбо от нас", "О нас" },
             })
             {
                 ResizeKeyboard = true
@@ -46,12 +45,66 @@ class main
                 await botClient.SendTextMessageAsync(message.Chat, "Проверка на новые позиции началась!");
                 return;
             }
-            if (message.Text.ToLower() == "Настроить параметры вывода")
+            if (message.Text.ToLower() == "/db")
             {
-                UO.ChangeStep(Convert.ToInt32(message.Chat.Id), 1);
-                await botClient.SendTextMessageAsync(message.Chat, "Ответьте на пару вопросов, пожалуйста.");
+                db.CreateDB();
+                await botClient.SendTextMessageAsync(message.Chat, "Создаем бд!");
                 return;
             }
+            if (message.Text.ToLower() == "задать параметры выбора")
+            {
+                UserStep[Convert.ToInt32(message.Chat.Id)] = 1;
+                await botClient.SendTextMessageAsync(message.Chat, "Ответьте на пару вопросов, пожалуйста.\nВаш заказ должен содержать выпить?да/нет");
+                return;
+            }
+            if (UserStep.ContainsKey(Convert.ToInt32(message.Chat.Id)))
+            {
+                if (UserStep[Convert.ToInt32(message.Chat.Id)] == 1)
+                {
+                    if (message.Text.ToLower() == "да")
+                    {
+                        Console.WriteLine(message.Text.ToLower());
+                        UO.ChangeDrinkOption(Convert.ToInt32(message.Chat.Id), 1);
+                    }
+                    else if ((message.Text.ToLower() == "нет"))
+                    {
+                        Console.WriteLine(message.Text.ToLower());
+                        UO.ChangeDrinkOption(Convert.ToInt32(message.Chat.Id), 0);
+                    }
+                    UserStep[Convert.ToInt32(message.Chat.Id)] = 2;
+                    await botClient.SendTextMessageAsync(message.Chat, "Ваш заказ должен содержать бургер?да/нет.");
+                    return;
+                }
+                if (UserStep[Convert.ToInt32(message.Chat.Id)] == 2)
+                {
+                    if (message.Text.ToLower() == "да")
+                    {
+                        UO.ChangeBurgerOption(Convert.ToInt32(message.Chat.Id), 1);
+                    }
+                    else if ((message.Text.ToLower() == "нет"))
+                    {
+                        UO.ChangeBurgerOption(Convert.ToInt32(message.Chat.Id), 0);
+                    }
+                    UserStep[Convert.ToInt32(message.Chat.Id)] = 3;
+                    await botClient.SendTextMessageAsync(message.Chat, "Ваш заказ должен содержать закуски?да/нет.");
+                    return;
+                }
+                if (UserStep[Convert.ToInt32(message.Chat.Id)] == 3)
+                {
+                    if (message.Text.ToLower() == "да")
+                    {
+                        UO.ChangeEtcOption(Convert.ToInt32(message.Chat.Id), 1);
+                    }
+                    else if ((message.Text.ToLower() == "нет"))
+                    {
+                        UO.ChangeEtcOption(Convert.ToInt32(message.Chat.Id), 0);
+                    }
+                    UserStep.Remove(Convert.ToInt32(message.Chat.Id));
+                    await botClient.SendTextMessageAsync(message.Chat, "Готово!");
+                    return;
+                }
+            }
+  
             await botClient.SendTextMessageAsync(message.Chat, "Дорогой, я ничего не понимаю!");
         }
     }
@@ -62,7 +115,6 @@ class main
     static void Main()
     {
         Console.WriteLine("Запущен бот " + bot.GetMeAsync().Result.FirstName);
-
         var cts = new CancellationTokenSource();
         var cancellationToken = cts.Token;
         var receiverOptions = new ReceiverOptions
