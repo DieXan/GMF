@@ -41,13 +41,11 @@ namespace UserOption
                     {
                         command.CommandText = $"INSERT INTO UsersOptions(id, drink, burger, etc) VALUES ('{user_id}', {NeedOrNot}, 666, 666)";
                         command.ExecuteNonQuery();
-                        Console.WriteLine(NeedOrNot);
                     }
                     else
                     {
                         command.CommandText = $"UPDATE UsersOptions SET drink = {NeedOrNot} WHERE id = {user_id}";
                         command.ExecuteNonQuery();
-                        Console.WriteLine(NeedOrNot);
                     }
                 }
                 catch (InvalidCastException e)
@@ -70,7 +68,6 @@ namespace UserOption
                     {
                         command.CommandText = $"UPDATE UsersOptions SET burger = {NeedOrNot} WHERE id = {user_id}";
                         command.ExecuteNonQuery();
-                        Console.WriteLine(NeedOrNot);
                     }
                 }
                 catch (InvalidCastException e)
@@ -93,7 +90,6 @@ namespace UserOption
                     {
                         command.CommandText = $"UPDATE UsersOptions SET etc = {NeedOrNot} WHERE id = {user_id}";
                         command.ExecuteNonQuery();
-                        Console.WriteLine(NeedOrNot);
                     }
                 }
                 catch (InvalidCastException e)
@@ -102,6 +98,27 @@ namespace UserOption
                 }
             }
         }
-
+        public static void ChangeBalanceOption(int user_id, int Balance)
+        {
+            using (var connection = new SqliteConnection("Data Source=global.db"))
+            {
+                connection.Open();
+                try
+                {
+                    SqliteCommand command = new SqliteCommand();
+                    command.Connection = connection;
+                    command.CommandText = $"SELECT COUNT(*) FROM UsersOptions WHERE id = {user_id}";
+                    if (Convert.ToInt16(command.ExecuteScalar().ToString()) == 1)
+                    {
+                        command.CommandText = $"UPDATE UsersOptions SET balance = {Balance} WHERE id = {user_id}";
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch (InvalidCastException e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
+        }
     }
 }

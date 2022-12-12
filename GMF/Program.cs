@@ -34,6 +34,13 @@ class main
             {
                 ResizeKeyboard = true
             };
+            ReplyKeyboardMarkup replyKeyboardMarkup_MoneyDef = new(new[]
+            {
+                new KeyboardButton[] { "250", "500", "750" },
+            })
+            {
+                ResizeKeyboard = true
+            };
             var message = update.Message;
             if (message.Text.ToLower() == "/start")
             {
@@ -105,6 +112,17 @@ class main
                     else if ((message.Text.ToLower() == "нет"))
                     {
                         UO.ChangeEtcOption(Convert.ToInt32(message.Chat.Id), 0);
+                    }
+                    UserStep[Convert.ToInt32(message.Chat.Id)] = 4;
+                    UserStep.Remove(Convert.ToInt32(message.Chat.Id));
+                    await botClient.SendTextMessageAsync(message.Chat, "Какой у вас бюджет?", replyMarkup: replyKeyboardMarkup_MoneyDef);
+                    return;
+                }
+                if (UserStep[Convert.ToInt32(message.Chat.Id)] == 4)
+                {
+                    if (Convert.ToInt32(message.Text) >= 0)
+                    {
+                        UO.ChangeBalanceOption(Convert.ToInt32(message.Chat.Id), Convert.ToInt32(message.Text));
                     }
                     UserStep.Remove(Convert.ToInt32(message.Chat.Id));
                     await botClient.SendTextMessageAsync(message.Chat, "Готово!", replyMarkup: replyKeyboardMarkup_start);
