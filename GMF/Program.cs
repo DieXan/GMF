@@ -27,6 +27,13 @@ class main
             {
                 ResizeKeyboard = true
             };
+            ReplyKeyboardMarkup replyKeyboardMarkup_YesOrNot = new(new[]
+            {
+                new KeyboardButton[] { "Да", "Нет" },
+            })
+            {
+                ResizeKeyboard = true
+            };
             var message = update.Message;
             if (message.Text.ToLower() == "/start")
             {
@@ -54,7 +61,7 @@ class main
             if (message.Text.ToLower() == "задать параметры выбора")
             {
                 UserStep[Convert.ToInt32(message.Chat.Id)] = 1;
-                await botClient.SendTextMessageAsync(message.Chat, "Ответьте на пару вопросов, пожалуйста.\nВаш заказ должен содержать выпить?да/нет");
+                await botClient.SendTextMessageAsync(message.Chat, "Ответьте на пару вопросов, пожалуйста.\nВаш заказ должен содержать выпить?да/нет", replyMarkup: replyKeyboardMarkup_YesOrNot);
                 return;
             }
             if (UserStep.ContainsKey(Convert.ToInt32(message.Chat.Id)))
@@ -72,7 +79,7 @@ class main
                         UO.ChangeDrinkOption(Convert.ToInt32(message.Chat.Id), 0);
                     }
                     UserStep[Convert.ToInt32(message.Chat.Id)] = 2;
-                    await botClient.SendTextMessageAsync(message.Chat, "Ваш заказ должен содержать бургер?да/нет.");
+                    await botClient.SendTextMessageAsync(message.Chat, "Ваш заказ должен содержать бургер?да/нет.", replyMarkup: replyKeyboardMarkup_YesOrNot);
                     return;
                 }
                 if (UserStep[Convert.ToInt32(message.Chat.Id)] == 2)
@@ -86,7 +93,7 @@ class main
                         UO.ChangeBurgerOption(Convert.ToInt32(message.Chat.Id), 0);
                     }
                     UserStep[Convert.ToInt32(message.Chat.Id)] = 3;
-                    await botClient.SendTextMessageAsync(message.Chat, "Ваш заказ должен содержать закуски?да/нет.");
+                    await botClient.SendTextMessageAsync(message.Chat, "Ваш заказ должен содержать закуски?да/нет.", replyMarkup: replyKeyboardMarkup_YesOrNot);
                     return;
                 }
                 if (UserStep[Convert.ToInt32(message.Chat.Id)] == 3)
@@ -100,7 +107,7 @@ class main
                         UO.ChangeEtcOption(Convert.ToInt32(message.Chat.Id), 0);
                     }
                     UserStep.Remove(Convert.ToInt32(message.Chat.Id));
-                    await botClient.SendTextMessageAsync(message.Chat, "Готово!");
+                    await botClient.SendTextMessageAsync(message.Chat, "Готово!", replyMarkup: replyKeyboardMarkup_start);
                     return;
                 }
             }
