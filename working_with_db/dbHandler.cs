@@ -134,6 +134,30 @@ namespace DatabaseHandler
             }
             return str;
         }
+        public static string FindEtc(int balance)
+        {
+            string str = "";
+            using (var connection = new SqliteConnection("Data Source=global.db"))
+            {
+                connection.Open();
+                try
+                {
+                    SqliteCommand command = new SqliteCommand();
+                    command.Connection = connection;
+                    command.CommandText = $"SELECT id FROM foods WHERE category = 'Закуски' AND price = (SELECT MIN(price) FROM foods WHERE category = 'Закуски')";
+                    int FoodId = Convert.ToInt32(command.ExecuteScalar().ToString());
+                    command.CommandText = $"SELECT name FROM foods WHERE id = {FoodId}";
+                    str += command.ExecuteScalar().ToString() + ":";
+                    command.CommandText = $"SELECT price FROM foods WHERE id = {FoodId}";
+                    str += command.ExecuteScalar().ToString();
+                }
+                catch (InvalidCastException e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
+            return str;
+        }
         public static void InsertUser(int id_user, string name_user)
         {
             using (var connection = new SqliteConnection("Data Source=global.db"))

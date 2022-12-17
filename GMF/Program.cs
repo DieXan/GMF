@@ -28,6 +28,13 @@ class main
             {
                 ResizeKeyboard = true
             };
+            ReplyKeyboardMarkup replyKeyboardMarkup_ready_combo = new(new[]
+            {
+                new KeyboardButton[] { "Комбо бомж", "Комбо для двоих", "Комбо для себя любимого" },
+            })
+            {
+                ResizeKeyboard = true
+            };
             ReplyKeyboardMarkup replyKeyboardMarkup_YesOrNot = new(new[]
             {
                 new KeyboardButton[] { "Да", "Нет" },
@@ -64,6 +71,26 @@ class main
             {
                 db.CreateDB();
                 await botClient.SendTextMessageAsync(message.Chat, "Создаем бд!");
+                return;
+            }
+            if (message.Text.ToLower() == "готовые комбо от нас")
+            {
+                await botClient.SendTextMessageAsync(message.Chat, "Выбери предложенное комбо от нас:", replyMarkup: replyKeyboardMarkup_ready_combo);
+                return;
+            }
+            if (message.Text.ToLower() == "комбо бомж")
+            {
+                await botClient.SendTextMessageAsync(message.Chat, "Предлагаем вам комбо за 108 рублей:\nПервая позиция:\nЧизбургер 47 рублей\nВтворая позиция\nСок яблочный 61 рубль", replyMarkup: replyKeyboardMarkup_start);
+                return;
+            }
+            if (message.Text.ToLower() == "комбо для двоих")
+            {
+                await botClient.SendTextMessageAsync(message.Chat, "Предлагаем вам комбо за 368 рублей:\nПервая позиция:\nЧикен кинг 2х99 рублей\nВтворая позиция\nPepsi 2x85 рубль", replyMarkup: replyKeyboardMarkup_start);
+                return;
+            }
+            if (message.Text.ToLower() == "комбо для себя любимого")
+            {
+                await botClient.SendTextMessageAsync(message.Chat, "Предлагаем вам комбо за 230 рублей:\nПервая позиция:\nЧикенбургер 4х55 рублей\nВтворая позиция\nЧерный чай 10 рубль", replyMarkup: replyKeyboardMarkup_start);
                 return;
             }
             if (message.Text.ToLower() == "подобрать")
