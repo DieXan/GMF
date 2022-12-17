@@ -50,126 +50,132 @@ class main
                 ResizeKeyboard = true
             };
             var message = update.Message;
-            if (message.Text.ToLower() == "/start")
+            try
             {
-                db.InsertUser(Convert.ToInt32(message.Chat.Id), message.Chat.FirstName);
-                await botClient.SendTextMessageAsync(message.Chat, "Здравствуйте!", replyMarkup: replyKeyboardMarkup_start);
-                return;
-            }
-            if (message.Text.ToLower() == "о нас")
-            {
-                await botClient.SendTextMessageAsync(message.Chat, "Над созданием экосистемы виновны:\n@cute_admin\n@bulletproof_heart", replyMarkup: replyKeyboardMarkup_start);
-                return;
-            }
-            if (message.Text.ToLower() == "/update")
-            {
-                sf.GetAllFoodInfo();
-                await botClient.SendTextMessageAsync(message.Chat, "Проверка на новые позиции началась!");
-                return;
-            }
-            if (message.Text.ToLower() == "/db")
-            {
-                db.CreateDB();
-                await botClient.SendTextMessageAsync(message.Chat, "Создаем бд!");
-                return;
-            }
-            if (message.Text.ToLower() == "готовые комбо от нас")
-            {
-                await botClient.SendTextMessageAsync(message.Chat, "Выбери предложенное комбо от нас:", replyMarkup: replyKeyboardMarkup_ready_combo);
-                return;
-            }
-            if (message.Text.ToLower() == "комбо бомж")
-            {
-                await botClient.SendTextMessageAsync(message.Chat, "Предлагаем вам комбо за 108 рублей:\nПервая позиция:\nЧизбургер 47 рублей\nВтворая позиция\nСок яблочный 61 рубль", replyMarkup: replyKeyboardMarkup_start);
-                return;
-            }
-            if (message.Text.ToLower() == "комбо для двоих")
-            {
-                await botClient.SendTextMessageAsync(message.Chat, "Предлагаем вам комбо за 368 рублей:\nПервая позиция:\nЧикен кинг 2х99 рублей\nВтворая позиция\nPepsi 2x85 рубль", replyMarkup: replyKeyboardMarkup_start);
-                return;
-            }
-            if (message.Text.ToLower() == "комбо для себя любимого")
-            {
-                await botClient.SendTextMessageAsync(message.Chat, "Предлагаем вам комбо за 230 рублей:\nПервая позиция:\nЧикенбургер 4х55 рублей\nВтворая позиция\nЧерный чай 10 рубль", replyMarkup: replyKeyboardMarkup_start);
-                return;
-            }
-            if (message.Text.ToLower() == "подобрать")
-            {
-                if (db.CheckActive(Convert.ToInt32(message.Chat.Id)) == 1)
+                if (message.Text.ToLower() == "/start")
                 {
-                    await botClient.SendTextMessageAsync(message.Chat, OH.GetFoodForUser(Convert.ToInt32(message.Chat.Id)), replyMarkup: replyKeyboardMarkup_start);
+                    db.InsertUser(Convert.ToInt32(message.Chat.Id), message.Chat.FirstName);
+                    await botClient.SendTextMessageAsync(message.Chat, "Здравствуйте!", replyMarkup: replyKeyboardMarkup_start);
                     return;
                 }
-                else
+                if (message.Text.ToLower() == "о нас")
+                {
+                    await botClient.SendTextMessageAsync(message.Chat, "Над созданием экосистемы виновны:\n@cute_admin\n@bulletproof_heart", replyMarkup: replyKeyboardMarkup_start);
+                    return;
+                }
+                if (message.Text.ToLower() == "/update")
+                {
+                    sf.GetAllFoodInfo();
+                    await botClient.SendTextMessageAsync(message.Chat, "Проверка на новые позиции началась!");
+                    return;
+                }
+                if (message.Text.ToLower() == "/db")
+                {
+                    db.CreateDB();
+                    await botClient.SendTextMessageAsync(message.Chat, "Создаем бд!");
+                    return;
+                }
+                if (message.Text.ToLower() == "готовые комбо от нас")
+                {
+                    await botClient.SendTextMessageAsync(message.Chat, "Выбери предложенное комбо от нас:", replyMarkup: replyKeyboardMarkup_ready_combo);
+                    return;
+                }
+                if (message.Text.ToLower() == "комбо бомж")
+                {
+                    await botClient.SendTextMessageAsync(message.Chat, "Предлагаем вам комбо за 108 рублей:\nПервая позиция:\nЧизбургер 47 рублей\nВтворая позиция\nСок яблочный 61 рубль", replyMarkup: replyKeyboardMarkup_start);
+                    return;
+                }
+                if (message.Text.ToLower() == "комбо для двоих")
+                {
+                    await botClient.SendTextMessageAsync(message.Chat, "Предлагаем вам комбо за 368 рублей:\nПервая позиция:\nЧикен кинг 2х99 рублей\nВтворая позиция\nPepsi 2x85 рубль", replyMarkup: replyKeyboardMarkup_start);
+                    return;
+                }
+                if (message.Text.ToLower() == "комбо для себя любимого")
+                {
+                    await botClient.SendTextMessageAsync(message.Chat, "Предлагаем вам комбо за 230 рублей:\nПервая позиция:\nЧикенбургер 4х55 рублей\nВтворая позиция\nЧерный чай 10 рубль", replyMarkup: replyKeyboardMarkup_start);
+                    return;
+                }
+                if (message.Text.ToLower() == "подобрать")
+                {
+                    if (db.CheckActive(Convert.ToInt32(message.Chat.Id)) == 1)
+                    {
+                        await botClient.SendTextMessageAsync(message.Chat, OH.GetFoodForUser(Convert.ToInt32(message.Chat.Id)), replyMarkup: replyKeyboardMarkup_start);
+                        return;
+                    }
+                    else
+                    {
+                        UserStep[Convert.ToInt32(message.Chat.Id)] = 1;
+                        await botClient.SendTextMessageAsync(message.Chat, "Ответьте на пару вопросов, пожалуйста.\nВаш заказ должен содержать выпить?да/нет", replyMarkup: replyKeyboardMarkup_YesOrNot);
+                        return;
+                    }
+                
+                }
+                if (message.Text.ToLower() == "задать параметры выбора")
                 {
                     UserStep[Convert.ToInt32(message.Chat.Id)] = 1;
                     await botClient.SendTextMessageAsync(message.Chat, "Ответьте на пару вопросов, пожалуйста.\nВаш заказ должен содержать выпить?да/нет", replyMarkup: replyKeyboardMarkup_YesOrNot);
                     return;
                 }
-                
+                if (UserStep.ContainsKey(Convert.ToInt32(message.Chat.Id)))
+                {
+                    if (UserStep[Convert.ToInt32(message.Chat.Id)] == 1)
+                    {
+                        if (message.Text.ToLower() == "да")
+                        {
+                            Console.WriteLine(message.Text.ToLower());
+                            UO.ChangeDrinkOption(Convert.ToInt32(message.Chat.Id), 1);
+                        }
+                        else if ((message.Text.ToLower() == "нет"))
+                        {
+                            Console.WriteLine(message.Text.ToLower());
+                            UO.ChangeDrinkOption(Convert.ToInt32(message.Chat.Id), 0);
+                        }
+                        UserStep[Convert.ToInt32(message.Chat.Id)] = 2;
+                        await botClient.SendTextMessageAsync(message.Chat, "Ваш заказ должен содержать бургер?да/нет.", replyMarkup: replyKeyboardMarkup_YesOrNot);
+                        return;
+                    }
+                    if (UserStep[Convert.ToInt32(message.Chat.Id)] == 2)
+                    {
+                        if (message.Text.ToLower() == "да")
+                        {
+                            UO.ChangeBurgerOption(Convert.ToInt32(message.Chat.Id), 1);
+                        }
+                        else if ((message.Text.ToLower() == "нет"))
+                        {
+                            UO.ChangeBurgerOption(Convert.ToInt32(message.Chat.Id), 0);
+                        }
+                        UserStep[Convert.ToInt32(message.Chat.Id)] = 3;
+                        await botClient.SendTextMessageAsync(message.Chat, "Ваш заказ должен содержать закуски?да/нет.", replyMarkup: replyKeyboardMarkup_YesOrNot);
+                        return;
+                    }
+                    if (UserStep[Convert.ToInt32(message.Chat.Id)] == 3)
+                    {
+                        if (message.Text.ToLower() == "да")
+                        {
+                            UO.ChangeEtcOption(Convert.ToInt32(message.Chat.Id), 1);
+                        }
+                        else if ((message.Text.ToLower() == "нет"))
+                        {
+                            UO.ChangeEtcOption(Convert.ToInt32(message.Chat.Id), 0);
+                        }
+                        UserStep[Convert.ToInt32(message.Chat.Id)] = 4;
+                        await botClient.SendTextMessageAsync(message.Chat, "Какой у вас бюджет?", replyMarkup: replyKeyboardMarkup_MoneyDef);
+                        return;
+                    }
+                    if (UserStep[Convert.ToInt32(message.Chat.Id)] == 4)
+                    {
+                        UO.ChangeBalanceOption(Convert.ToInt32(message.Chat.Id), Convert.ToInt32(message.Text));
+                        UserStep.Remove(Convert.ToInt32(message.Chat.Id));
+                        Console.WriteLine(1);
+                        await botClient.SendTextMessageAsync(message.Chat, "Готово!", replyMarkup: replyKeyboardMarkup_start);
+                        return;
+                    }
+                }
             }
-            if (message.Text.ToLower() == "задать параметры выбора")
+            catch
             {
-                UserStep[Convert.ToInt32(message.Chat.Id)] = 1;
-                await botClient.SendTextMessageAsync(message.Chat, "Ответьте на пару вопросов, пожалуйста.\nВаш заказ должен содержать выпить?да/нет", replyMarkup: replyKeyboardMarkup_YesOrNot);
-                return;
+                Console.WriteLine("hehe");
             }
-            if (UserStep.ContainsKey(Convert.ToInt32(message.Chat.Id)))
-            {
-                if (UserStep[Convert.ToInt32(message.Chat.Id)] == 1)
-                {
-                    if (message.Text.ToLower() == "да")
-                    {
-                        Console.WriteLine(message.Text.ToLower());
-                        UO.ChangeDrinkOption(Convert.ToInt32(message.Chat.Id), 1);
-                    }
-                    else if ((message.Text.ToLower() == "нет"))
-                    {
-                        Console.WriteLine(message.Text.ToLower());
-                        UO.ChangeDrinkOption(Convert.ToInt32(message.Chat.Id), 0);
-                    }
-                    UserStep[Convert.ToInt32(message.Chat.Id)] = 2;
-                    await botClient.SendTextMessageAsync(message.Chat, "Ваш заказ должен содержать бургер?да/нет.", replyMarkup: replyKeyboardMarkup_YesOrNot);
-                    return;
-                }
-                if (UserStep[Convert.ToInt32(message.Chat.Id)] == 2)
-                {
-                    if (message.Text.ToLower() == "да")
-                    {
-                        UO.ChangeBurgerOption(Convert.ToInt32(message.Chat.Id), 1);
-                    }
-                    else if ((message.Text.ToLower() == "нет"))
-                    {
-                        UO.ChangeBurgerOption(Convert.ToInt32(message.Chat.Id), 0);
-                    }
-                    UserStep[Convert.ToInt32(message.Chat.Id)] = 3;
-                    await botClient.SendTextMessageAsync(message.Chat, "Ваш заказ должен содержать закуски?да/нет.", replyMarkup: replyKeyboardMarkup_YesOrNot);
-                    return;
-                }
-                if (UserStep[Convert.ToInt32(message.Chat.Id)] == 3)
-                {
-                    if (message.Text.ToLower() == "да")
-                    {
-                        UO.ChangeEtcOption(Convert.ToInt32(message.Chat.Id), 1);
-                    }
-                    else if ((message.Text.ToLower() == "нет"))
-                    {
-                        UO.ChangeEtcOption(Convert.ToInt32(message.Chat.Id), 0);
-                    }
-                    UserStep[Convert.ToInt32(message.Chat.Id)] = 4;
-                    await botClient.SendTextMessageAsync(message.Chat, "Какой у вас бюджет?", replyMarkup: replyKeyboardMarkup_MoneyDef);
-                    return;
-                }
-                if (UserStep[Convert.ToInt32(message.Chat.Id)] == 4)
-                {
-                    UO.ChangeBalanceOption(Convert.ToInt32(message.Chat.Id), Convert.ToInt32(message.Text));
-                    UserStep.Remove(Convert.ToInt32(message.Chat.Id));
-                    Console.WriteLine(1);
-                    await botClient.SendTextMessageAsync(message.Chat, "Готово!", replyMarkup: replyKeyboardMarkup_start);
-                    return;
-                }
-            }
-  
             await botClient.SendTextMessageAsync(message.Chat, "Дорогой, я ничего не понимаю!");
         }
     }
